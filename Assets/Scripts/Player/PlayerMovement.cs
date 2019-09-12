@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * Player movement, walking, jumping, and animation triggers
+ * Author: lejara 
+ * 
+ */
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +17,9 @@ public class PlayerMovement : MonoBehaviour
     //[HideInInspector]
     public bool isJumping = false;
     public float movementSpeed = 10f;
-    [HideInInspector]     
-    public float groundRadius;
+    //[HideInInspector]     
+    public float groundDetectionRadius;
+    public float jumpInitalVelocity = 4f;
     public float jumpAddVelocity = 4f;
     public float jumpAmmount = 200f;
     public float decreaseAmmountBy = 2f;
@@ -23,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     private float hor_Input = 0;
     private float currentJumpAmmount = 0;
     private Rigidbody2D rig;
+    private Animator animator;
     private SpriteRenderer spriteRenderer;
 
     // Start is called before the first frame update
@@ -30,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rig = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -41,11 +50,13 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         //Check if player feet is touching the ground
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatsGround);
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundDetectionRadius, whatsGround);
         
         JumpCheck();
 
         MoveSide();
+
+        AnimationTriggersSet();
     }
 
     //Check User Input for movement
@@ -67,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            rig.velocity = new Vector2((hor_Input * movementSpeed ) / 1.3f, rig.velocity.y);
+            rig.velocity = new Vector2((hor_Input * movementSpeed ) , rig.velocity.y);
         }
 
         if (hor_Input != 0)
@@ -83,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
         // If its ready for a jump, add a ammount for the jump
         if (jump_Input && !isJumping && isGrounded)
         {
-            rig.velocity = new Vector2(rig.velocity.x, 4f);
+            rig.velocity = new Vector2(rig.velocity.x, jumpInitalVelocity);
             currentJumpAmmount = jumpAmmount;
             AddJumpForce();
 
@@ -118,9 +129,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void AnimationTriggersSet()
+    {
+        animator.SetBool("isGrounded", isGrounded);
+    }
+
     void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(groundCheck.position, groundRadius);
+        Gizmos.DrawWireSphere(groundCheck.position, groundDetectionRadius);
     }
 
 }
