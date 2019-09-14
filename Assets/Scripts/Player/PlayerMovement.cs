@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isGrounded;
     //[HideInInspector]
     public bool isJumping = false;
+    public bool stopMoving = false;
     public float movementSpeed = 10f;
     //[HideInInspector]     
     public float groundDetectionRadius;
@@ -56,15 +57,24 @@ public class PlayerMovement : MonoBehaviour
 
         MoveSide();
 
-        AnimationTriggersSet();
+        MovementAnimationTriggersSet();
     }
 
     //Check User Input for movement
     private void CheckMoveInput()
     {
-        hor_Input = Input.GetAxis("Horizontal");
+        if (!stopMoving)
+        {
+            hor_Input = Input.GetAxis("Horizontal");
 
-        jump_Input = Input.GetButton("Jump");
+            jump_Input = Input.GetButton("Jump");
+        }
+        else
+        {
+            hor_Input = 0;
+            jump_Input = false;
+        }
+        
 
     }
 
@@ -129,9 +139,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void AnimationTriggersSet()
+    private void MovementAnimationTriggersSet()
     {
         animator.SetBool("isGrounded", isGrounded);
+        animator.SetBool("isMoving", Mathf.Abs(rig.velocity.x) > 0 );
     }
 
     void OnDrawGizmos()

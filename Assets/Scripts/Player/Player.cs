@@ -11,12 +11,13 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 
-    public PlayerMovement playerMovement;
-
-    public int health = 4;
+    public bool isPlayerDead = false;
+    public int health = 1;    
     //make this instance static so it can be used across scripts
     public static Player instance = null;
+    public PlayerMovement playerMovement;
 
+    private Animator animator;
     private void Awake()
     {
         //Set the instance only once.
@@ -37,12 +38,37 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
+    {
+        GameLogicAnimationTriggerSets();
+    }
+
+    void CheckDeath()
+    {
+        if (health <= 0)
+        {
+            Dead();
+        }
+    }
+    void Dead()
+    {
+        isPlayerDead = true;
+        playerMovement.stopMoving = true;
+        GameManager.instance.PlayerDied();
+    }
+
+    void GameLogicAnimationTriggerSets()
+    {
+        animator.SetBool("isDead", isPlayerDead);
+    }
+
+    public void Hit()
     {
         
+        health--;
+        CheckDeath();
     }
 }
