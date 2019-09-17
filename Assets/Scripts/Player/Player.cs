@@ -1,24 +1,27 @@
-﻿/*
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+/*
  * Player aggregate class, for game logic
  * Author: lejara 
  * 
  */
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-
 public class Player : MonoBehaviour
 {
 
     public bool isPlayerDead = false;
-    public int health = 1;    
-    //make this instance static so it can be used across scripts
-    public static Player instance = null;
+    public int health = 1;
+    [HideInInspector]
+    public int currentHealth;
     public PlayerMovement playerMovement;
 
+    //make this instance static so it can be used across scripts
+    public static Player instance = null;
+
     private Animator animator;
-    private void Awake()
+
+    void Awake()
     {
         //Set the instance only once.
         if (instance == null)
@@ -39,16 +42,32 @@ public class Player : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        currentHealth = health;
     }
 
-    private void Update()
+    
+    public void Respawn(Vector3 respawnLocation)
+    {
+        isPlayerDead = false;
+        playerMovement.stopMoving = false;
+        currentHealth = health;
+        this.transform.position = respawnLocation;
+    }
+
+    public void Hit()
+    {
+        currentHealth--;
+        CheckDeath();
+    }
+
+    void Update()
     {
         GameLogicAnimationTriggerSets();
     }
 
     void CheckDeath()
     {
-        if (health <= 0)
+        if (currentHealth <= 0)
         {
             Dead();
         }
@@ -65,10 +84,4 @@ public class Player : MonoBehaviour
         animator.SetBool("isDead", isPlayerDead);
     }
 
-    public void Hit()
-    {
-        
-        health--;
-        CheckDeath();
-    }
 }

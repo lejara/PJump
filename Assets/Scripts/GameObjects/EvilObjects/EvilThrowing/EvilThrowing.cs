@@ -33,6 +33,31 @@ public abstract class EvilThrowing : EvilObjects
         followPlayer = follPlayer;
     }
 
+    public void StartThrowing()
+    {
+        throwing = true;
+        cicleCollider.enabled = false;
+        CheckFollowPlayer();
+    }
+
+    protected void Throw()
+    {
+
+        rigidb.velocity = direction * velocitySpeed;
+    }
+
+    void FixedUpdate()
+    {
+        if (throwing)
+        {
+            CheckFollowPlayer();
+            Throw();
+        }
+    }
+
+    /*
+     * Detection when to start throwing, or when this object has hit the player
+     */
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
@@ -50,6 +75,11 @@ public abstract class EvilThrowing : EvilObjects
         }
     }
 
+    /*
+     * Destory the object when its out of the world bounds
+     * Leo Note: if lag becomes a problem, 
+     * need to add a recycling system of this object
+     */
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag.Equals("CameraBounds"))
@@ -58,6 +88,11 @@ public abstract class EvilThrowing : EvilObjects
         }
     }
 
+    /*
+     * Checks if the followPlayer bool is true. 
+     * If so change the direction to the current player's location.
+     * Does not update the direction afterwards
+     */
     void CheckFollowPlayer()
     {
         if (followPlayer)
@@ -72,28 +107,6 @@ public abstract class EvilThrowing : EvilObjects
         {
             readyForFollowPlayer = true;
         }
-    }
-
-   void FixedUpdate()
-    {
-        if (throwing)
-        {
-            CheckFollowPlayer();
-            Throw();
-        }
-    }
-
-    public void StartThrowing()
-    {
-        throwing = true;
-        cicleCollider.enabled = false;
-        CheckFollowPlayer();
-    }
-
-    protected void Throw()
-    {
-       
-        rigidb.velocity = direction * velocitySpeed;
     }
 
     void OnDrawGizmos()
