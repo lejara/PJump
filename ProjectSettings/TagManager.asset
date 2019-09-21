@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CameraBounds
   - Platform
+  - PlayerBullet
   layers:
   - Default
   - TransparentFX
