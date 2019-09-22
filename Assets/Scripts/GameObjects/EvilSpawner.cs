@@ -33,9 +33,9 @@ public abstract class EvilSpawner : EvilObjects
     void Start()
     {
         //spawedObjects = new List<GameObject>();       
-
+       
         if (!useTriggerStart)
-        {
+        {            
             StartSpawning();
         }
     }

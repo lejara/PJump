@@ -15,7 +15,7 @@ public abstract class EvilObjects : MonoBehaviour
     protected event Dead OnDeath;
     // Start is called before the first frame update
     void Start()
-    {
+    {        
         OnDamage += this.LoseHealth;
         OnDeath += this.Despwan;
         

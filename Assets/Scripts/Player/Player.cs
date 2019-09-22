@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public int currentHealth;
     public PlayerMovement playerMovement;
-
+    public PlyaerInteraction playerInterection;
     //make this instance static so it can be used across scripts
     public static Player instance = null;
 
@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
     public void Respawn(Vector3 respawnLocation)
     {
         isPlayerDead = false;
+        playerInterection.canIntereact = true;
         playerMovement.stopMoving = false;
         currentHealth = health;
         this.transform.position = respawnLocation;
@@ -74,6 +75,7 @@ public class Player : MonoBehaviour
     }
     void Dead()
     {
+        playerInterection.canIntereact = false;
         isPlayerDead = true;
         playerMovement.stopMoving = true;
         GameManager.instance.PlayerDied();
