@@ -24,7 +24,7 @@ public class Mouse : MonoBehaviour
         //Makes the gameobject not be unloaded when entering a new scene
         DontDestroyOnLoad(this);
 
-        Cursor.visible = false;
+        //Cursor.visible = false;
     }
 
     // Update is called once per frame
