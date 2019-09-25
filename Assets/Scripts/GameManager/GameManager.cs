@@ -4,27 +4,25 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
-    public GameObject respawnPoint; //TODO: make more dynamic
-
+    public GameObject firstRespawnPoint;    
+    public NextSceneHelper nextSceneHelper;
+    public static GameManager instance = null;       //make this instance static so it can be used across scripts
     [HideInInspector]
     public Player player;
-    //make this instance static so it can be used across scripts
-    public static GameManager instance = null;
-
-    private bool respawn_Input = false;
+    [SerializeField]
+    public RepawnCords currentRepawn;
 
     private void Awake()
     {
         //Set the instance only once.
         if (instance == null)
-        {
+        {           
             instance = this;
         }
         else if (instance != this)
-        {
+        {            
             //Enforces that there will always be one instance of a gameObject. This is for type errors prevention
-            Destroy(gameObject);
+            Destroy(this.gameObject);
             Debug.LogWarning("Another instance of GameManager have been created and destoryed!");
         }
 
@@ -36,19 +34,13 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = Player.instance;
-        PlayerRespawn();
+        currentRepawn = new RepawnCords(firstRespawnPoint.transform.position,
+                                        nextSceneHelper.GetCurrentScene());
     }
 
-    void Update()
+    public void SetRepawnPoint(RepawnCords rP)
     {
-        CheckInput();
-
-        //If player presses respawn while still alive, respawn
-        if (respawn_Input)
-        {
-            PlayerRespawn();
-        }
-        
+        currentRepawn = rP;
     }
 
     public void PlayerDied()
@@ -58,12 +50,9 @@ public class GameManager : MonoBehaviour
 
     public void PlayerRespawn()
     {
-        player.Respawn(respawnPoint.transform.position);                
-    }
-
-    private void CheckInput()
-    {
-        respawn_Input = Input.GetButtonDown("Respawn");
+        nextSceneHelper.RespawnOnScene(currentRepawn.scene);
+        player.Respawn(currentRepawn.location);
+        
     }
 
 }

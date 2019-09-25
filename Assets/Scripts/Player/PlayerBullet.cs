@@ -34,13 +34,11 @@ public class PlayerBullet : MonoBehaviour
         rigidb.velocity = direction * velocitySpeed;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-
-        //TODO: fix this
         if (!collision.gameObject.tag.Equals("CameraBounds") && !collision.gameObject.tag.Equals("Player"))
         {
-            
+
             Destroy(this.gameObject);
 
         }

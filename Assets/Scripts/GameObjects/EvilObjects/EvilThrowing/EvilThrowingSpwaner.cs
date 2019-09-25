@@ -11,7 +11,7 @@ public class EvilThrowingSpwaner : EvilSpawner
 {
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         this.cicleCollider = GetComponent<CircleCollider2D>();
         setupLam = obj => {

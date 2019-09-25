@@ -56,18 +56,20 @@ public abstract class EvilThrowing : EvilObjects
     }
 
     /*
-     * Detection when to start throwing, or when this object has hit the player
+     * Overriding Detection when to start throwing, or when this object has hit the player
      */
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
+        CheckHitSelf(collision);
 
         if (collision.gameObject.tag.Equals("Player"))
         {
-            if (throwing)
-            {
+            if (throwing && canHurtPlayer)
+            {                
                 GameManager.instance.player.Hit();
+                Despwan();
             }
-            else if(useStartingTrigger)
+            else if (useStartingTrigger)
             {
 
                 StartThrowing();
@@ -84,7 +86,7 @@ public abstract class EvilThrowing : EvilObjects
     {
         if (collision.gameObject.tag.Equals("CameraBounds"))
         {
-            Destroy(this.gameObject, 1);
+            Despwan();
         }
     }
 

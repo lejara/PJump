@@ -13,8 +13,8 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: PokelawlsTheGame
-  defaultCursor: {fileID: 2800000, guid: 5770a4fa713ad974d93cf4c6bb50747e, type: 3}
+  productName: P_GAME
+  defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
@@ -496,7 +496,8 @@ PlayerSettings:
   webGLCompressionFormat: 1
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    7: 1
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}
