@@ -5,6 +5,7 @@ using Pathfinding;
 
 public class EvilNPC : EvilObjects
 {
+    public bool isActive = false;
     public bool followPlayer;
     public bool followPath;
 
@@ -13,33 +14,45 @@ public class EvilNPC : EvilObjects
 
     private AIDestinationSetter ai_Dest_Setter;
     private AIPath aiPath;
+    private CircleCollider2D collderCicle;
     // Start is called before the first frame update
     void Start()
     {
         ai_Dest_Setter = GetComponent<AIDestinationSetter>();
         aiPath = GetComponent<AIPath>();
-        
+        collderCicle = GetComponent<CircleCollider2D>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag.Equals("Player"))
+        {
+            isActive = true;
+            collderCicle.enabled = false;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (followPlayer)
+        if (isActive)
         {
-            ai_Dest_Setter.target = GameManager.instance.player.transform;
-        }
-        else if (followPath)
-        {           
-            if (aiPath.reachedDestination)
+            if (followPlayer)
             {
-                ai_Dest_Setter.target = ai_Dest_Setter.target == startingPoint.transform ? endPoint.transform : startingPoint.transform;
+                ai_Dest_Setter.target = GameManager.instance.player.transform;
             }
-            else if (ai_Dest_Setter.target != startingPoint.transform && ai_Dest_Setter.target != endPoint.transform)
+            else if (followPath)
             {
-                ai_Dest_Setter.target = startingPoint.transform;
+                if (aiPath.reachedDestination)
+                {
+                    ai_Dest_Setter.target = ai_Dest_Setter.target == startingPoint.transform ? endPoint.transform : startingPoint.transform;
+                }
+                else if (ai_Dest_Setter.target != startingPoint.transform && ai_Dest_Setter.target != endPoint.transform)
+                {
+                    ai_Dest_Setter.target = startingPoint.transform;
+                }
             }
-        }
-        print(aiPath.reachedDestination);
+        }        
     }
 
     void OnDrawGizmos()

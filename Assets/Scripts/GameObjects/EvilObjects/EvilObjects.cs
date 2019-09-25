@@ -73,7 +73,7 @@ public abstract class EvilObjects : MonoBehaviour
         }
     }
     void OnCollisionEnter2D(Collision2D collision)
-    {
+    {        
         if (!CheckPlayerHit(collision))
         {
             CheckHitSelf(collision);
