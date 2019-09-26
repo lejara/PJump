@@ -21,9 +21,7 @@ public class CameraFollow : MonoBehaviour
 
     void Start()
     {
-        playerTrans = Player.instance.GetComponent<Transform>(); 
-                                                                 
-        offset = transform.position - playerTrans.position;
+        playerTrans = Player.instance.GetComponent<Transform>();                                                                  
 
         minBounds = boundBox.bounds.min;    //Gets the minimum x and y for the bounds
         maxBounds = boundBox.bounds.max;    // Gets the maximum x and y for the bounds

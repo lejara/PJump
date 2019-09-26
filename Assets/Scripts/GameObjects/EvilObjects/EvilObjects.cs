@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class EvilObjects : MonoBehaviour
 {
+    public bool isActive = false;
+    public bool activateOnDamage = true;
     public bool canDie = true;
     public bool canHurtPlayer = true;
     public int health = 1;
@@ -21,14 +23,27 @@ public abstract class EvilObjects : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void Activate()
     {
-        
+        isActive = true;        
     }
+
+    protected virtual void Dectivate()
+    {
+        isActive = false;
+    }
+
     protected void OnHitSelf()
     {
-        LoseHealth();
+        if (activateOnDamage && !isActive)
+        {
+            Activate();
+        }        
+        if (canDie)
+        {
+            LoseHealth();
+        }
+        
     }
 
     protected void LoseHealth()
@@ -50,10 +65,10 @@ public abstract class EvilObjects : MonoBehaviour
         Destroy(this.gameObject, 0);
     }
 
-    protected bool CheckPlayerHit(Collision2D collision)
+    protected bool CheckHitPlayer(Collision2D collision)
     {
         if (canHurtPlayer && collision.gameObject.tag.Equals("Player"))
-        {
+        {            
             GameManager.instance.player.Hit();
             return true;
         }
@@ -61,20 +76,18 @@ public abstract class EvilObjects : MonoBehaviour
     }
     protected void CheckHitSelf(Collision2D collision)
     {
-        if (canDie)
+        foreach (string tag in hurtTags)
         {
-            foreach (string tag in hurtTags)
+            if (collision.gameObject.tag.Equals(tag))
             {
-                if (collision.gameObject.tag.Equals(tag))
-                {
-                    OnHitSelf();
-                }
+                OnHitSelf();
             }
         }
+        
     }
     void OnCollisionEnter2D(Collision2D collision)
     {        
-        if (!CheckPlayerHit(collision))
+        if (!CheckHitPlayer(collision))
         {
             CheckHitSelf(collision);
         }

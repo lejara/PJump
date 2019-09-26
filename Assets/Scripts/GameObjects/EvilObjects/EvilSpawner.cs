@@ -14,7 +14,6 @@ public abstract class EvilSpawner : EvilObjects
 {
 
     public bool useTriggerStart = true;
-    public bool spawning = false;
     public bool targetPlayer = false;
     public float spawnRatePerSecond = 1;
     public float speedVelocity = 1f;    
@@ -36,7 +35,7 @@ public abstract class EvilSpawner : EvilObjects
        
         if (!useTriggerStart)
         {            
-            StartSpawning();
+            Activate();
         }
     }
 
@@ -45,9 +44,9 @@ public abstract class EvilSpawner : EvilObjects
     {
         direction = (directionObj.transform.position - transform.position).normalized;
         
-        if (notSpawning && spawning)
+        if (notSpawning && isActive)
         {
-            StartSpawning();
+            Activate();
         }
     }
 
@@ -61,15 +60,15 @@ public abstract class EvilSpawner : EvilObjects
         {
             if (useTriggerStart)
             {
-                StartSpawning();
+                Activate();
             }
 
         }
     }
 
-    void StartSpawning()
-    {
-        spawning = true;
+    protected override void Activate()
+    {        
+        isActive = true;
         notSpawning = false;
         cicleCollider.enabled = false;
         SpawnObject();
@@ -78,7 +77,7 @@ public abstract class EvilSpawner : EvilObjects
     void SpawnObject()
     {
 
-        if (spawning)
+        if (isActive)
         {
             GameObject obj = Instantiate(spawnPrefab, 
                                         transform.position, 

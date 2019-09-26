@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed = 10f;
     //[HideInInspector]     
     public float groundDetectionRadius;
+    public float secondJumpVelcoity = 15f;
     public float jumpInitalVelocity = 4f;
     public float jumpAddVelocity = 4f;
     public float jumpAmmount = 200f;
@@ -28,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatsGround;
 
     private bool jump_Input = false;
-    private bool secondJump_Input = false;
+    private bool JumpPressDown_Input = false;
     private bool canSecondJump = false;
     private float hor_Input = 0;
     private float currentJumpAmmount = 0;
@@ -48,15 +49,16 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckMoveInput();               
+        CheckMoveInput();
+
+        JumpCheck();
     }
 
     private void FixedUpdate()
     {
         //Check if player feet is touching the ground
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundDetectionRadius, whatsGround);
-        
-        JumpCheck();
+                
 
         MoveSide();
 
@@ -72,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
             jump_Input = Input.GetButton("Jump");
 
-            secondJump_Input = Input.GetButtonDown("Jump");
+            JumpPressDown_Input = Input.GetButtonDown("Jump");
         }
         else
         {
@@ -112,18 +114,18 @@ public class PlayerMovement : MonoBehaviour
 
         //Check if the character is not jumping already and is touching ground
         // If its ready for a jump, add a ammount for the jump
-        if (jump_Input && !isJumping && isGrounded)
+        if (JumpPressDown_Input && !isJumping && isGrounded)
         {
             rig.velocity = new Vector2(rig.velocity.x, jumpInitalVelocity);
             currentJumpAmmount = jumpAmmount;
             AddJumpForce();
 
         }
-        //Secound Jump OOF
-        else if (!isGrounded && secondJump_Input && canSecondJump)
+        //Second Jump 
+        else if (!isGrounded && JumpPressDown_Input && canSecondJump && !isJumping)
         {
             print("add secound jumpo");
-            rig.velocity = new Vector2(rig.velocity.x, jumpInitalVelocity);
+            rig.velocity = new Vector2(rig.velocity.x, secondJumpVelcoity);
             canSecondJump = false;
         }
         if (isJumping) // keep calling jump until the jump has ended

@@ -83,7 +83,7 @@ MonoBehaviour:
   repathRate: 0.5
   canSearch: 1
   canMove: 1
-  maxSpeed: 1
+  maxSpeed: 15
   gravity: {x: 0, y: 0, z: 0}
   groundMask:
     serializedVersion: 2
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canDie: 1
   canHurtPlayer: 1
-  health: 1
+  health: 5
   hurtTags:
   - PlayerBullet
   isActive: 0
@@ -178,7 +178,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 300
+  m_Radius: 140.24
 --- !u!1 &3499250020553864620
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,7 +5,6 @@ using Pathfinding;
 
 public class EvilNPC : EvilObjects
 {
-    public bool isActive = false;
     public bool followPlayer;
     public bool followPath;
 
@@ -27,9 +26,14 @@ public class EvilNPC : EvilObjects
     {
         if (collision.gameObject.tag.Equals("Player"))
         {
-            isActive = true;
-            collderCicle.enabled = false;
+            Activate();
         }
+    }
+
+    protected override void Activate()
+    {
+        isActive = true;
+        collderCicle.enabled = false;
     }
 
     // Update is called once per frame
