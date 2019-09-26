@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlyaerInteraction : MonoBehaviour
+public class PlayerInteraction : MonoBehaviour
 {
     public bool canIntereact = true;
     public bool shoot;
@@ -37,7 +37,7 @@ public class PlyaerInteraction : MonoBehaviour
             GameObject obj = Instantiate(PlayerBullet, BulletSpawn.transform.position, this.transform.rotation);
 
             obj.GetComponent<PlayerBullet>().SetBullet(shootVelocitySpeed, 
-                (Mouse.instance.gameObject.transform.position - transform.position).normalized);
+                (Mouse.instance.gameObject.transform.position - BulletSpawn.gameObject.transform.position).normalized);
         }
     }
 

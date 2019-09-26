@@ -24,7 +24,7 @@ public class Mouse : MonoBehaviour
         //Makes the gameobject not be unloaded when entering a new scene
         DontDestroyOnLoad(this);
 
-        //Cursor.visible = false;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -35,8 +35,11 @@ public class Mouse : MonoBehaviour
 
     void MouseCursorUpdate()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0;
+        var inputMousePos = Input.mousePosition;
+        inputMousePos.z = Mathf.Abs(Camera.main.transform.position.z);
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(inputMousePos);
+
+        
         transform.position = mousePos;
     }
 }

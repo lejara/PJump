@@ -35,15 +35,13 @@ public class CameraFollow : MonoBehaviour
 
     }
 
-    void LateUpdate()
+    void Update()
     {
-        if (playerTrans != null)
-        {
 
-            float clampedX = Mathf.Clamp(playerTrans.position.x + offset.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
-            float clampedY = Mathf.Clamp(playerTrans.position.y + offset.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
+        float clampedX = Mathf.Clamp(playerTrans.position.x + offset.x, minBounds.x + halfWidth, maxBounds.x - halfWidth);
+        float clampedY = Mathf.Clamp(playerTrans.position.y + offset.y, minBounds.y + halfHeight, maxBounds.y - halfHeight);
 
-            this.transform.position = new Vector3(clampedX, clampedY, transform.position.z);
-        }
+        this.transform.position = new Vector3(clampedX, clampedY, transform.position.z);
+        
     }
 }

@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public int currentHealth;
     public PlayerMovement playerMovement;
-    public PlyaerInteraction playerInterection;
+    public PlayerInteraction playerInterection;
     //make this instance static so it can be used across scripts
     public static Player instance = null;
 

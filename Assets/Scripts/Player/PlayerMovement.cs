@@ -28,11 +28,14 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask whatsGround;
 
     private bool jump_Input = false;
+    private bool secondJump_Input = false;
+    private bool canSecondJump = false;
     private float hor_Input = 0;
     private float currentJumpAmmount = 0;
     private Rigidbody2D rig;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +71,8 @@ public class PlayerMovement : MonoBehaviour
             hor_Input = Input.GetAxis("Horizontal");
 
             jump_Input = Input.GetButton("Jump");
+
+            secondJump_Input = Input.GetButtonDown("Jump");
         }
         else
         {
@@ -99,7 +104,12 @@ public class PlayerMovement : MonoBehaviour
 
     //Check if Player is ready to jump
     private void JumpCheck()
-    {
+    {        //TODO: second jump needs fixing, it is used sometimes while in the normal jump
+        if (isGrounded)
+        {
+            canSecondJump = true;
+        }
+
         //Check if the character is not jumping already and is touching ground
         // If its ready for a jump, add a ammount for the jump
         if (jump_Input && !isJumping && isGrounded)
@@ -109,9 +119,17 @@ public class PlayerMovement : MonoBehaviour
             AddJumpForce();
 
         }
-        else if (isJumping) // keep calling jump until the jump has ended
+        //Secound Jump OOF
+        else if (!isGrounded && secondJump_Input && canSecondJump)
+        {
+            print("add secound jumpo");
+            rig.velocity = new Vector2(rig.velocity.x, jumpInitalVelocity);
+            canSecondJump = false;
+        }
+        if (isJumping) // keep calling jump until the jump has ended
         {
             AddJumpForce();
+
         }
 
     }
@@ -128,6 +146,7 @@ public class PlayerMovement : MonoBehaviour
         {
             //Stop adding force
             isJumping = false;
+            //canSecondJump = true;
             currentJumpAmmount = 0;
  
         }
