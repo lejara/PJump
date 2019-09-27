@@ -33,6 +33,11 @@ public abstract class EvilThrowing : EvilObjects
         followPlayer = follPlayer;
     }
 
+    protected override void Activate()
+    {
+
+    }
+
     public void StartThrowing()
     {
         throwing = true;
@@ -69,9 +74,15 @@ public abstract class EvilThrowing : EvilObjects
                 GameManager.instance.player.Hit();
                 Despwan();
             }
-            else if (useStartingTrigger)
-            {
+        }
+    }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag.Equals("Player"))
+        {
+            if (useStartingTrigger)
+            {
                 StartThrowing();
             }
         }

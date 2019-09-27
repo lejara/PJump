@@ -23,11 +23,12 @@ public abstract class EvilObjects : MonoBehaviour
         
     }
 
+    //TODO fix thism and make it public
     protected virtual void Activate()
     {
         isActive = true;        
     }
-
+    //TODO make sure this is called instend of making it false directly, and fix it to make it public
     protected virtual void Dectivate()
     {
         isActive = false;

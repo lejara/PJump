@@ -6,21 +6,31 @@ public class BeamHurt : MonoBehaviour
 {
     public bool active = false;
     public bool hasWarning = true;
+    public bool fireWarningShootOnly = false;
     public bool isShootingBeam = false;
     public float activeTime = 1f;
     public float warningTime = 1f;
+    public delegate void BeamOn();
+    public event BeamOn BeamOnEvent;
+    public delegate void BeamOff();
+    public event BeamOff BeamOffEvent;
+
 
     private SpriteRenderer spriteRenderer;
-    private Collider2D collider2D;
+    private Collider2D col2D;
     
     // Start is called before the first frame update
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        collider2D = GetComponent<Collider2D>();
+        col2D = GetComponent<Collider2D>();
 
-        collider2D.enabled = false;
+        col2D.enabled = false;
         spriteRenderer.enabled = false;
+
+        BeamOnEvent += ReadyFire;
+        BeamOffEvent += DeactivateBeam;
+
     }
 
     // Update is called once per frame
@@ -28,15 +38,19 @@ public class BeamHurt : MonoBehaviour
     {
         if (active && !isShootingBeam)
         {
-            if (hasWarning)
-            {
-                WarningShoot();
-            }
-            else
-            {
-                ShootBeam();
-            }
-            
+            BeamOnEvent();
+        }
+    }
+
+    void ReadyFire()
+    {
+        if (hasWarning)
+        {
+            WarningShoot();
+        }
+        else
+        {
+            ShootBeam();
         }
     }
 
@@ -54,7 +68,7 @@ public class BeamHurt : MonoBehaviour
         var color = spriteRenderer.color;
         spriteRenderer.color = new Color(color.r, color.g, color.b, 0.8f);
         isShootingBeam = true;
-        collider2D.enabled = true;
+        col2D.enabled = true;
         spriteRenderer.enabled = true;
         StartCoroutine(BeamShutOffDelay());
     }
@@ -62,7 +76,7 @@ public class BeamHurt : MonoBehaviour
     void DeactivateBeam()
     {
         isShootingBeam = false;
-        collider2D.enabled = false;
+        col2D.enabled = false;
         spriteRenderer.enabled = false;
         active = false;
     }
@@ -70,13 +84,21 @@ public class BeamHurt : MonoBehaviour
     IEnumerator BeamShutOffDelay()
     {
         yield return new WaitForSeconds(activeTime);
-        DeactivateBeam();
+        BeamOffEvent();
     }
 
     IEnumerator BeamWarningWait()
     {
         yield return new WaitForSeconds(warningTime);
-        ShootBeam();
+        if (!fireWarningShootOnly)
+        {
+            ShootBeam();
+        }
+        else
+        {
+            BeamOffEvent();
+        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
