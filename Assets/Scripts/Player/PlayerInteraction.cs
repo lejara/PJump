@@ -9,12 +9,17 @@ public class PlayerInteraction : MonoBehaviour
     public float shootVelocitySpeed;
     public GameObject BulletSpawn;
     public GameObject PlayerBullet;
+    public AudioClip shoot_sound;
 
+    
     private bool respawn_Input = false;
-    // Start is called before the first frame update
-    void Start()
+    public AudioSource audioSource;
+    void Awake()
     {
-        
+        //audioSource.GetComponent<AudioSource>();
+
+        //TODO: make this line support for multipul different clips
+        audioSource.clip = shoot_sound;
     }
 
     // Update is called once per frame
@@ -38,6 +43,7 @@ public class PlayerInteraction : MonoBehaviour
 
             obj.GetComponent<PlayerBullet>().SetBullet(shootVelocitySpeed, 
                 (Mouse.instance.gameObject.transform.position - BulletSpawn.gameObject.transform.position).normalized);
+            audioSource.Play();
         }
     }
 
